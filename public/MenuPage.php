@@ -29,33 +29,31 @@
                         <?php
                         session_start();
                         include 'db.php';
-                       //if (!isset($_SESSION["order"])) {
-                            $sql = 'SELECT max(ID) as maxId FROM zakazy';
-                            $result = mysqli_query($connection, $sql);
-                            $row = mysqli_fetch_array($result);
-                            $_SESSION["order"] = $row['maxId'];
+                        //if (!isset($_SESSION["order"])) {
+                        $sql = 'SELECT max(ID) as maxId FROM zakazy';
+                        $result = mysqli_query($connection, $sql);
+                        $row = mysqli_fetch_array($result);
+                        $_SESSION["order"] = $row['maxId'];
                         //}
-                            
 
-                            if (!isset($_COOKIE["admin"]) or !isset($_COOKIE["user"])) {
-                                setcookie("admin", 0);
-                                setcookie("user", 0);
-                            }
-                            
-                            if ($_COOKIE["admin"] == 1)
-                            {
-                                echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
 
-                            if ($_COOKIE["user"] == 1)
-                            {
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
+                        if (!isset($_COOKIE["admin"]) or !isset($_COOKIE["user"])) {
+                            setcookie("admin", 0);
+                            setcookie("user", 0);
+                        }
 
-                            if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
-                                echo "<li><a href='loginForm.php'>Вход</a></li>";
-                            }
+                        if ($_COOKIE["admin"] == 1) {
+                            echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
+                            echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+                        }
+
+                        if ($_COOKIE["user"] == 1) {
+                            echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+                        }
+
+                        if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
+                            echo "<li><a href='loginForm.php'>Вход</a></li>";
+                        }
                         ?>
                     </ul>
                 </div>
@@ -69,12 +67,10 @@
                     <div class="col-lg-8 col-lg-offset-2">  
                         <h1>Меню</h1>
                         <h2>Здесь вы можете заказать кофе и выпечку</h2>
-                        <?php 
+                        <?php
                             if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
                                 echo "<h2>Но для начала войдите в свой аккаунт</h2>";
-                            }
-                            else
-                            {
+                            } else {
                                 echo "<div class='zak d-flex flex-row'>
                                 <div>
                                         <a href='cartPage.php'>
@@ -88,19 +84,17 @@
                                 $result2 = mysqli_query($connection, $sql2);
                                 $row2 = mysqli_fetch_array($result2);
                                 $_SESSION['kolvo'] = $row2['totalKolvo'];
-                           
+
                                 if (isset($_SESSION['kolvo'])) {
-                                    echo "<div class='count'><h3 id='kolvo'>".$_SESSION['kolvo']."</h3></div>
+                                    echo "<div class='count'><h3 id='kolvo'>" . $_SESSION['kolvo'] . "</h3></div>
                                     </div>";
-                                }
-                                else
-                                {
+                                } else {
                                     echo "<div class='count'><h3 id='kolvo'>0</h3></div>
                                     </div>";
                                 }
-                                        
+
                             }
-                         ?>
+                        ?>
                         
                     </div>
                 </div>
@@ -112,17 +106,16 @@
 
          <div class="container tovSel">
             
-        <?php 
+        <?php
         echo "<select class='selectTov minimal dropdown-menu'>";
-        echo "<option class='dropdown-item' value='999'>Все</option>";
-                    $sql = 'SELECT ID, nazv FROM category';
-                    $result = mysqli_query($connection, $sql);
-                    while ($row = mysqli_fetch_array($result))
-                    {   
-                        echo "<option class='dropdown-item' value='".$row['ID']."'>".$row['nazv']."</option>";
-                    }
-                    echo "</select>";
-        ?>
+                        echo "<option class='dropdown-item' value='999'>Все</option>";
+                        $sql = 'SELECT ID, nazv FROM category';
+                        $result = mysqli_query($connection, $sql);
+                        while ($row = mysqli_fetch_array($result)) {
+                            echo "<option class='dropdown-item' value='" . $row['ID'] . "'>" . $row['nazv'] . "</option>";
+                        }
+                        echo "</select>";
+                        ?>
             
         </div>
 
@@ -130,51 +123,48 @@
         <div class="container w">
             <div class="row row-cols-2 ins row-cols-lg-4 g-3 centered tovrow">
                 <br><br>
-                <?php 
-                    
-
-                    include 'db.php';
+                <?php
 
 
-                    $sql = 'SELECT ID, naim, opis, cena, photo FROM tovar'; 
-                    $result = mysqli_query($connection, $sql);
-                    while ($row = mysqli_fetch_array($result))
-                    {   
-                        echo "<div class='col mt-4 tov' style='min-width:250px'>
+                                    include 'db.php';
+
+
+                        $sql = 'SELECT ID, naim, opis, cena, photo FROM tovar';
+                        $result = mysqli_query($connection, $sql);
+                        while ($row = mysqli_fetch_array($result)) {
+                            echo "<div class='col mt-4 tov' style='min-width:250px'>
                         
-                        <img src=img/".$row['photo']." alt=''>
-                        <h4>".$row['naim']."</h4>
-                        <h3>".$row['opis']."</h3>
-                        <h4>".$row['cena']." руб.</h4>
-                        <button class='fb' type='submit' name='addBtn' value=".$row['ID'].">Добавить</button>
+                        <img src=img/" . $row['photo'] . " alt=''>
+                        <h4>" . $row['naim'] . "</h4>
+                        <h3>" . $row['opis'] . "</h3>
+                        <h4>" . $row['cena'] . " руб.</h4>
+                        <button class='fb' type='submit' name='addBtn' value=" . $row['ID'] . ">Добавить</button>
                         
                         </div>
                         ";
-                    }
-                    if (isset($_POST["addBtn"])) {
-                        if (!isset($_SESSION["order"])) {
-                            $sql = 'SELECT max(ID) as maxId FROM zakazy';
-                            $result = mysqli_query($connection, $sql);
-                            $row = mysqli_fetch_array($result);
-                            $_SESSION["order"] = $row['maxId'];
                         }
-                            
+                        if (isset($_POST["addBtn"])) {
+                            if (!isset($_SESSION["order"])) {
+                                $sql = 'SELECT max(ID) as maxId FROM zakazy';
+                                $result = mysqli_query($connection, $sql);
+                                $row = mysqli_fetch_array($result);
+                                $_SESSION["order"] = $row['maxId'];
+                            }
 
-                            $sql1 = 'SELECT kolvoTov FROM cart where idZak = '.$_SESSION["order"].' and idTov ='.$_POST["addBtn"];
+
+                            $sql1 = 'SELECT kolvoTov FROM cart where idZak = ' . $_SESSION["order"] . ' and idTov =' . $_POST["addBtn"];
                             $result1 = mysqli_query($connection, $sql1);
                             $row1 = mysqli_fetch_array($result1);
                             if ($row1) {
-                                $query=mysqli_query($connection,'UPDATE cart SET kolvoTov=kolvoTov + 1 where idZak = '.$_SESSION["order"].' and idTov ='.$_POST["addBtn"]);
+                                $query = mysqli_query($connection, 'UPDATE cart SET kolvoTov=kolvoTov + 1 where idZak = ' . $_SESSION["order"] . ' and idTov =' . $_POST["addBtn"]);
+                            } else {
+                                $query = mysqli_query($connection, "insert into cart values(default, " . $_SESSION["order"] . "," . $_POST["addBtn"] . ",'1')");
                             }
-                            else
-                            {
-                                $query=mysqli_query($connection,"insert into cart values(default, ".$_SESSION["order"].",".$_POST["addBtn"].",'1')");
-                            }
-                            
 
-                            
-                    }
-                ?>
+
+
+                        }
+                        ?>
                 
             </div>
             <br><br>
@@ -205,7 +195,7 @@
                     confirmButtonColor: '#ff7878'
                 })
             </script>
-        <?php 
+        <?php
             $_SESSION['successZak'] = 0;
         } ?>
 

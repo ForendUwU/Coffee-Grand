@@ -25,28 +25,26 @@
                         <li><a href="mainPage.php">Главная</a></li>
                         <li><a href="MenuPage.php">Меню</a></li>
                         <li><a href="sale.php">Скидка</a></li>
-                        <?php 
+                        <?php
                         //setcookie("admin", "", time() - 3600);
                         //setcookie("user", "", time() - 3600);
                             if (!isset($_COOKIE["admin"]) or !isset($_COOKIE["user"])) {
                                 setcookie("admin", 0);
                                 setcookie("user", 0);
                             }
-                            
-                            if ($_COOKIE["admin"] == 1)
-                            {
-                                 echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
-                                 echo "<li class='active'><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
 
-                            if ($_COOKIE["user"] == 1)
-                            {
-                                 echo "<li  class='active'><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
+                        if ($_COOKIE["admin"] == 1) {
+                            echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
+                            echo "<li class='active'><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+                        }
 
-                            if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
-                                echo "<li><a href='loginForm.php'>Вход</a></li>";
-                            }
+                        if ($_COOKIE["user"] == 1) {
+                            echo "<li  class='active'><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+                        }
+
+                        if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
+                            echo "<li><a href='loginForm.php'>Вход</a></li>";
+                        }
                         ?>
                     </ul>
                 </div>
@@ -59,16 +57,16 @@
                     <div class="col-lg-8 col-lg-offset-2">
                         <h1>Профиль</h1>
                         <i class='fa-solid fa-user'></i>
-                        <?php 
+                        <?php
                             include 'db.php';
-                            $user = $_COOKIE["userID"];
-                            $res=mysqli_query($connection,"SELECT FIO FROM users WHERE ID='$user'");
-                            $row = mysqli_fetch_array($res);
-                            echo "<h2>".$row["FIO"]."</h2>";
-                            $res=mysqli_query($connection,"SELECT bonusPoints FROM users WHERE ID='$user'");
-                            $row = mysqli_fetch_array($res);
-                            echo "<h3>Бонусные баллы: ".$row["bonusPoints"]."</h3>";
-                         ?>
+                        $user = $_COOKIE["userID"];
+                        $res = mysqli_query($connection, "SELECT FIO FROM users WHERE ID='$user'");
+                        $row = mysqli_fetch_array($res);
+                        echo "<h2>" . $row["FIO"] . "</h2>";
+                        $res = mysqli_query($connection, "SELECT bonusPoints FROM users WHERE ID='$user'");
+                        $row = mysqli_fetch_array($res);
+                        echo "<h3>Бонусные баллы: " . $row["bonusPoints"] . "</h3>";
+                        ?>
                          <form action="logOut.php" method="POST"><button type="submit" class="btn">Выход</button></form>
                     </div>
                 </div>
@@ -82,30 +80,29 @@
                     
                 
                     
-                    <?php 
+                    <?php
                         session_start();
                         include 'db.php';
-                        $sql = 'SELECT dateZak, sumZakaza FROM zakazy where idUser='.$_COOKIE["userID"].' and dateZak != 0000-00-00';
+                        $sql = 'SELECT dateZak, sumZakaza FROM zakazy where idUser=' . $_COOKIE["userID"] . ' and dateZak != 0000-00-00';
                         $result = mysqli_query($connection, $sql);
-                        
+
                         if (mysqli_num_rows($result) > 0) {
                             echo "<h4>История заказов</h4>
                                   <hr>";
-                        
-                        while ($row = mysqli_fetch_array($result))
-                        {   
-                            echo "<h3>".$row['dateZak']."</h3>";
-                            echo "<h3>".$row['sumZakaza']." руб.</h3><hr>";
 
-                        }
-                        mysqli_close($connection);
+                            while ($row = mysqli_fetch_array($result)) {
+                                echo "<h3>" . $row['dateZak'] . "</h3>";
+                                echo "<h3>" . $row['sumZakaza'] . " руб.</h3><hr>";
 
-                    }else{ 
+                            }
+                            mysqli_close($connection);
 
-                    echo "<div class=' empty'>
+                        } else {
+
+                            echo "<div class=' empty'>
                             <h1>Нет заказов</h1>
                           </div>";
-                    } ?>
+                        } ?>
                 </div>
                 
                 

@@ -1,5 +1,5 @@
 <?php
-    $startPage = '/public/mainPage.php';
 
-    header('Location: ' . $startPage);
-?>
+$startPage = '/public/mainPage.php';
+
+header('Location: ' . $startPage);

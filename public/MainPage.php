@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <?php 
+    <?php
         include 'templates/header.php';
     ?>
     <!-- <head>
@@ -28,29 +28,27 @@
                         <li class="active"><a href="mainPage.php">Главная</a></li>
                         <li><a href="MenuPage.php">Меню</a></li>
                         <li><a href="sale.php">Скидка</a></li>
-                        <?php 
+                        <?php
                         //setcookie("admin", "", time() - 3600);
                         //setcookie("user", "", time() - 3600);
                             if (!isset($_COOKIE["admin"]) or !isset($_COOKIE["user"])) {
                                 //setcookie("admin", 0);
                                 //setcookie("user", 0);
                             }
-                            
-                            if (isset($_COOKIE["admin"]) && $_COOKIE["admin"] == 1)
-                            {
-                                echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
 
-                            if (isset($_COOKIE["user"]) && $_COOKIE["user"] == 1)
-                            {
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
+    if (isset($_COOKIE["admin"]) && $_COOKIE["admin"] == 1) {
+        echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
+        echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+    }
 
-                            if (isset($_COOKIE["admin"]) && isset($_COOKIE["user"]) && $_COOKIE["admin"] == 0 && $_COOKIE["user"] == 0) {
-                                echo "<li><a href='loginForm.php'>Вход</a></li>";
-                            }
-                        ?>
+    if (isset($_COOKIE["user"]) && $_COOKIE["user"] == 1) {
+        echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+    }
+
+    if (isset($_COOKIE["admin"]) && isset($_COOKIE["user"]) && $_COOKIE["admin"] == 0 && $_COOKIE["user"] == 0) {
+        echo "<li><a href='loginForm.php'>Вход</a></li>";
+    }
+    ?>
                     </ul>
                 </div>
             </div>

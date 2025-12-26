@@ -32,21 +32,19 @@
                                 setcookie("admin", 0);
                                 setcookie("user", 0);
                             }
-                            
-                            if ($_COOKIE["admin"] == 1)
-                            {
-                                echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
 
-                            if ($_COOKIE["user"] == 1)
-                            {
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
+                        if ($_COOKIE["admin"] == 1) {
+                            echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
+                            echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+                        }
 
-                            if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
-                                echo "<li><a href='loginForm.php'>Вход</a></li>";
-                            }
+                        if ($_COOKIE["user"] == 1) {
+                            echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+                        }
+
+                        if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
+                            echo "<li><a href='loginForm.php'>Вход</a></li>";
+                        }
                         ?>
                     </ul>
                 </div>
@@ -67,18 +65,16 @@
         <div class="qr">
             <div class="container">
                 <div class="row centered">
-                <?php 
+                <?php
                     include 'db.php';
-                    if ($_COOKIE["user"] == 1)
-                    {
-                        $user = $_COOKIE["userID"];
-                        echo "<img src='http://chart.apis.google.com/chart?cht=qr&chs=300x300&chl=".$user."'>";
-                    }
+                        if ($_COOKIE["user"] == 1) {
+                            $user = $_COOKIE["userID"];
+                            echo "<img src='http://chart.apis.google.com/chart?cht=qr&chs=300x300&chl=" . $user . "'>";
+                        }
 
-                    if ($_COOKIE["admin"] == 1)
-                    {
+                        if ($_COOKIE["admin"] == 1) {
 
-                        echo "<video id='preview' class = 'embed-responsive-item'></video>
+                            echo "<video id='preview' class = 'embed-responsive-item'></video>
                         <script type='text/javascript'>
                         let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
                         scanner.addListener('scan', function (content) {
@@ -111,19 +107,18 @@
                         <p id = 'res'></p>";
 
 
-                    }
+                        }
 
-                    if ($_COOKIE["user"] == 0 && $_COOKIE["admin"] == 0) 
-                    {
-                        echo "<div class='container needEn'>
+                        if ($_COOKIE["user"] == 0 && $_COOKIE["admin"] == 0) {
+                            echo "<div class='container needEn'>
                             <div class='row centered'>
                             <h1>Для того, чтобы воспользоваться скидкой, войдите в свой профиль</h1>
                             </div>
                         </div>";
-                    }
+                        }
 
-                
-                ?>
+
+                        ?>
                 </div>
             </div>
         </div>

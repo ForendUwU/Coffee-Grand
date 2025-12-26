@@ -29,26 +29,24 @@
                         <li><a href="sale.php">Скидка</a></li>
                         <?php
                         session_start();
-                            if (!isset($_COOKIE["admin"]) or !isset($_COOKIE["user"])) {
-                                setcookie("admin", 0);
-                                setcookie("user", 0);
-                            }
-                            
-                            if ($_COOKIE["admin"] == 1)
-                            {
-                                 echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                                 
-                            }
+                        if (!isset($_COOKIE["admin"]) or !isset($_COOKIE["user"])) {
+                            setcookie("admin", 0);
+                            setcookie("user", 0);
+                        }
 
-                            if ($_COOKIE["user"] == 1)
-                            {
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
+                        if ($_COOKIE["admin"] == 1) {
+                            echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
+                            echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
 
-                            if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
-                                echo "<li><a href='loginForm.php'>Вход</a></li>";
-                            }
+                        }
+
+                        if ($_COOKIE["user"] == 1) {
+                            echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+                        }
+
+                        if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
+                            echo "<li><a href='loginForm.php'>Вход</a></li>";
+                        }
                         ?>
                     </ul>
                 </div>
@@ -80,49 +78,46 @@
 
             <div class="row row-cols-2 ins row-cols-lg-4 g-3 centered tovrow">
                 
-                <?php 
-                    
+                <?php
+
 
                     include 'db.php';
 
 
-                    $sql = 'SELECT tovar.naim, tovar.photo, tovar.opis, tovar.cena, tovar.ID, cart.idTov, cart.kolvoTov FROM tovar inner join cart on cart.idTov = tovar.ID where idZak='.$_SESSION["order"]; 
-                    $result = mysqli_query($connection, $sql);
-                    while ($row = mysqli_fetch_array($result))
-                    {   
-                        echo "<div class='col mt-4 tov' style='min-width:250px; max-width:250px;'>
-                        <img src=img/".$row['photo']." alt=''>
-                        <h4>".$row['naim']."</h4>
-                        <h3>".$row['opis']."</h3>
-                        <h4>".$row['cena']." руб.</h4>
-                        <h3 class='kolvoh'><input type='number' id=".$row['idTov']." class='form-control kolvoInp' value='".$row['kolvoTov']."'></input></h3>
-                        <form method='POST' action='udal.php'><button class='fb trashBtn' value=".$row['idTov']." name='idTov' type='submit'>Удалить</button></form>
+            $sql = 'SELECT tovar.naim, tovar.photo, tovar.opis, tovar.cena, tovar.ID, cart.idTov, cart.kolvoTov FROM tovar inner join cart on cart.idTov = tovar.ID where idZak=' . $_SESSION["order"];
+            $result = mysqli_query($connection, $sql);
+            while ($row = mysqli_fetch_array($result)) {
+                echo "<div class='col mt-4 tov' style='min-width:250px; max-width:250px;'>
+                        <img src=img/" . $row['photo'] . " alt=''>
+                        <h4>" . $row['naim'] . "</h4>
+                        <h3>" . $row['opis'] . "</h3>
+                        <h4>" . $row['cena'] . " руб.</h4>
+                        <h3 class='kolvoh'><input type='number' id=" . $row['idTov'] . " class='form-control kolvoInp' value='" . $row['kolvoTov'] . "'></input></h3>
+                        <form method='POST' action='udal.php'><button class='fb trashBtn' value=" . $row['idTov'] . " name='idTov' type='submit'>Удалить</button></form>
                         </div>";
-                    }
-                    if (isset($_POST["addBtn"])) {
-                        if (!isset($_SESSION["order"])) {
-                            $sql = 'SELECT max(ID) as maxId FROM zakazy';
-                            $result = mysqli_query($connection, $sql);
-                            $row = mysqli_fetch_array($result);
-                            $_SESSION["order"] = $row['maxId'];
-                        }
-                            
+            }
+            if (isset($_POST["addBtn"])) {
+                if (!isset($_SESSION["order"])) {
+                    $sql = 'SELECT max(ID) as maxId FROM zakazy';
+                    $result = mysqli_query($connection, $sql);
+                    $row = mysqli_fetch_array($result);
+                    $_SESSION["order"] = $row['maxId'];
+                }
 
-                            $sql1 = 'SELECT kolvoTov FROM cart where idZak = '.$_SESSION["order"].' and idTov ='.$_POST["addBtn"];
-                            $result1 = mysqli_query($connection, $sql1);
-                            $row1 = mysqli_fetch_array($result1);
-                            if ($row1) {
-                                $query=mysqli_query($connection,'UPDATE cart SET kolvoTov=kolvoTov + 1 where idZak = '.$_SESSION["order"].' and idTov ='.$_POST["addBtn"]);
-                            }
-                            else
-                            {
-                                $query=mysqli_query($connection,"insert into cart values(default, ".$_SESSION["order"].",".$_POST["addBtn"].",'1')");
-                            }
-                            
 
-                            
-                    }
-                ?>
+                $sql1 = 'SELECT kolvoTov FROM cart where idZak = ' . $_SESSION["order"] . ' and idTov =' . $_POST["addBtn"];
+                $result1 = mysqli_query($connection, $sql1);
+                $row1 = mysqli_fetch_array($result1);
+                if ($row1) {
+                    $query = mysqli_query($connection, 'UPDATE cart SET kolvoTov=kolvoTov + 1 where idZak = ' . $_SESSION["order"] . ' and idTov =' . $_POST["addBtn"]);
+                } else {
+                    $query = mysqli_query($connection, "insert into cart values(default, " . $_SESSION["order"] . "," . $_POST["addBtn"] . ",'1')");
+                }
+
+
+
+            }
+            ?>
                 
             </div>
 
@@ -132,30 +127,28 @@
                
             
 
-            <?php 
-                        include 'db.php';
-                        $sql = 'SELECT sum(tovar.cena * cart.kolvoTov) as totalSum FROM tovar inner join cart on cart.idTov = tovar.ID where idZak='.$_SESSION["order"];
-                        $result = mysqli_query($connection, $sql);
-                        $row = mysqli_fetch_array($result);
+            <?php
+                    include 'db.php';
+            $sql = 'SELECT sum(tovar.cena * cart.kolvoTov) as totalSum FROM tovar inner join cart on cart.idTov = tovar.ID where idZak=' . $_SESSION["order"];
+            $result = mysqli_query($connection, $sql);
+            $row = mysqli_fetch_array($result);
 
-                        
-                        $sql1 = 'SELECT bonusPoints FROM users where id='.$_COOKIE['userID'];
-                        $result1 = mysqli_query($connection, $sql1);
-                        $row1 = mysqli_fetch_array($result1);
-                        $sumWithSale = $row['totalSum'] - ($row1['bonusPoints'] * 0.001);
 
-                        echo "<h4 id='sum'>Общая сумма заказа: ".$row['totalSum']." руб.</h4>";
-                        if ($sumWithSale < 0) {
-                            echo "<h4 id='saleSum'>Сумма заказа с бонусными баллами: 0 руб.</h4>";
-                        }
-                        else
-                        {
-                            echo "<h4 id='saleSum'>Сумма заказа с бонусными баллами: ".$sumWithSale." руб.</h4>";    
-                        }
-                        
-                        
+            $sql1 = 'SELECT bonusPoints FROM users where id=' . $_COOKIE['userID'];
+            $result1 = mysqli_query($connection, $sql1);
+            $row1 = mysqli_fetch_array($result1);
+            $sumWithSale = $row['totalSum'] - ($row1['bonusPoints'] * 0.001);
 
-                        mysqli_close($connection);
+            echo "<h4 id='sum'>Общая сумма заказа: " . $row['totalSum'] . " руб.</h4>";
+            if ($sumWithSale < 0) {
+                echo "<h4 id='saleSum'>Сумма заказа с бонусными баллами: 0 руб.</h4>";
+            } else {
+                echo "<h4 id='saleSum'>Сумма заказа с бонусными баллами: " . $sumWithSale . " руб.</h4>";
+            }
+
+
+
+            mysqli_close($connection);
             ?>
 
         </div>
@@ -171,7 +164,7 @@
         </div>
         <br><br> 
 
-        <?php }else{ ?>
+        <?php } else { ?>
 
             <div class=" empty">
                 <h1>Корзина пуста</h1>

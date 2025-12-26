@@ -32,35 +32,33 @@
                                 setcookie("admin", 0);
                                 setcookie("user", 0);
                             }
-                            
-                            if ($_COOKIE["admin"] == 1)
-                            {
-                                echo "<li  class='active'><a href='profilePage.php'>Панель администратора</a></li>";
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
 
-                            if ($_COOKIE["user"] == 1)
-                            {
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
+                        if ($_COOKIE["admin"] == 1) {
+                            echo "<li  class='active'><a href='profilePage.php'>Панель администратора</a></li>";
+                            echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+                        }
 
-                            if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
-                                echo "<li><a href='loginForm.php'>Вход</a></li>";
-                            }
+                        if ($_COOKIE["user"] == 1) {
+                            echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+                        }
+
+                        if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
+                            echo "<li><a href='loginForm.php'>Вход</a></li>";
+                        }
                         ?>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <?php 
+        <?php
 
             session_start();
-            
-            if (isset($_SESSION['den'])) {
-                $al = $_SESSION['den'];
-                if ($al == 1) {
-                    echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.6.15/dist/sweetalert2.all.min.js'></script>
+
+                        if (isset($_SESSION['den'])) {
+                            $al = $_SESSION['den'];
+                            if ($al == 1) {
+                                echo "<script src='https://cdn.jsdelivr.net/npm/sweetalert2@11.6.15/dist/sweetalert2.all.min.js'></script>
                     <script>
                         Swal.fire({
                         title: 'Пользователи поздравлены',
@@ -70,11 +68,11 @@
                         padding: '8% 0 0 0',
                         });
                     </script>";
-                    $_SESSION['den'] = 0;
-                }
-            }
-            
-        ?>
+                                $_SESSION['den'] = 0;
+                            }
+                        }
+
+                        ?>
 
         <div class="container">
             <div class="row centered">
@@ -108,23 +106,21 @@
         <br>
         <br>
 
-        <?php 
-            include 'db.php';
-            if (isset($_POST['table'])) {
-                $table_name = $_POST['table'];
-                if (!is_null($table_name)) 
-                {
-                    if ($table_name != 'null') 
-                    {
-                        setcookie("table_name", $table_name);
-                        $query = "SELECT * FROM $table_name";
-                        $result = mysqli_query($connection, $query);
+        <?php
+                            include 'db.php';
+                        if (isset($_POST['table'])) {
+                            $table_name = $_POST['table'];
+                            if (!is_null($table_name)) {
+                                if ($table_name != 'null') {
+                                    setcookie("table_name", $table_name);
+                                    $query = "SELECT * FROM $table_name";
+                                    $result = mysqli_query($connection, $query);
 
-                        echo "<div class='container fTable'>";
-                        echo "<table id='myTable' class='display'>";
-                        echo "<thead>";
-                        if ($table_name == 'users') {
-                            echo "<tr>
+                                    echo "<div class='container fTable'>";
+                                    echo "<table id='myTable' class='display'>";
+                                    echo "<thead>";
+                                    if ($table_name == 'users') {
+                                        echo "<tr>
                                     <th>ID</th>
                                     <th>ФИО</th>
                                     <th>E-Mail</th>
@@ -134,22 +130,18 @@
                                     <th>Код активации профиля</th>
                                     <th>Статус активации профиля</th>
                                   </tr>";
-                        }
-                        else if($table_name == 'zakazy')
-                        {
+                                    } elseif ($table_name == 'zakazy') {
 
-                            echo "<tr>
+                                        echo "<tr>
                                     <th>ID</th>
                                     <th>ФИО пользователя</th>
                                     <th>Дата заказа</th>
                                     <th>Время заказа</th>
                                     <th>Сумма заказа</th>
                                   </tr>";
-                        }
-                        else if($table_name == 'tovar')
-                        {
+                                    } elseif ($table_name == 'tovar') {
 
-                            echo "<tr>
+                                        echo "<tr>
                                     <th>ID</th>
                                     <th>Наименование</th>
                                     <th>Описание</th>
@@ -157,281 +149,254 @@
                                     <th>Фото</th>
                                     <th>Категория</th>
                                   </tr>";
-                        }
-                        else if($table_name == 'category')
-                        {
+                                    } elseif ($table_name == 'category') {
 
-                            echo "<tr>
+                                        echo "<tr>
                                     <th>ID</th>
                                     <th>Название категории</th>
                                   </tr>";
-                        }
-                        else if($table_name == 'cart')
-                        {
+                                    } elseif ($table_name == 'cart') {
 
-                            echo "<tr>
+                                        echo "<tr>
                                     <th>ID</th>
                                     <th>ID заказа</th>
                                     <th>Название товара</th>
                                     <th>Кол-во товаров</th>
                                   </tr>";
-                        }
-
-                        echo "</thead>";
-                        echo "<tbody>";
-
-                            if ($table_name == 'zakazy') {
-                                $query = "SELECT zakazy.ID, users.FIO, zakazy.dateZak, zakazy.vremyaZak, zakazy.sumZakaza FROM zakazy inner join users on zakazy.idUser = users.ID order by id asc";
-                                $result = mysqli_query($connection, $query);
-                                while ($row = mysqli_fetch_assoc($result)) 
-                                {
-                                    echo "<tr>";
-                                    foreach ($row as $value) 
-                                    {
-                                        echo "<td>" . $value . "</td>";
                                     }
-                                    echo "</tr>";
-                                }
-                            }else if ($table_name == 'tovar') {
-                                $query = "SELECT tovar.ID, tovar.naim, tovar.opis, tovar.cena, tovar.photo, category.nazv FROM tovar inner join category on tovar.idCat = category.ID";
-                                $result = mysqli_query($connection, $query);
-                                while ($row = mysqli_fetch_array($result))
-                                { 
-                                    echo "<tr>";
-                                        echo "<td>". $row['ID'] . "</td>";
-                                        echo "<td>". $row['naim'] . "</td>";
-                                        echo "<td>". $row['opis'] . "</td>";
-                                        echo "<td>". $row['cena'] . "</td>";
-                                        echo "<td><img src=img/".$row['photo']." alt=''></td>";
-                                        echo "<td>". $row['nazv'] . "</td>";
-                                    echo "</tr>";
-                                }
-                            }
-                            else if ($table_name == 'cart') {
-                                $query = "SELECT cart.ID, cart.idZak, tovar.naim, cart.kolvoTov FROM cart inner join tovar on cart.idTov = tovar.ID order by cart.ID asc";
-                                $result = mysqli_query($connection, $query);
-                                while ($row = mysqli_fetch_assoc($result)) 
-                                {
-                                    echo "<tr>";
-                                    foreach ($row as $value) 
-                                    {
-                                        echo "<td>" . $value . "</td>";
-                                    }
-                                    echo "</tr>";
-                                }
-                            }
-                            else
-                            {
-                                while ($row = mysqli_fetch_assoc($result)) 
-                                {
-                                    echo "<tr>";
-                                        foreach ($row as $value) 
-                                        {
-                                            echo "<td>" . $value . "</td>";
+
+                                    echo "</thead>";
+                                    echo "<tbody>";
+
+                                    if ($table_name == 'zakazy') {
+                                        $query = "SELECT zakazy.ID, users.FIO, zakazy.dateZak, zakazy.vremyaZak, zakazy.sumZakaza FROM zakazy inner join users on zakazy.idUser = users.ID order by id asc";
+                                        $result = mysqli_query($connection, $query);
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>";
+                                            foreach ($row as $value) {
+                                                echo "<td>" . $value . "</td>";
+                                            }
+                                            echo "</tr>";
                                         }
-                                    echo "</tr>";
-                                }
-                            }
-                            echo "</tbody>";
-                        echo "</table>";
-                        echo "</div>";
+                                    } elseif ($table_name == 'tovar') {
+                                        $query = "SELECT tovar.ID, tovar.naim, tovar.opis, tovar.cena, tovar.photo, category.nazv FROM tovar inner join category on tovar.idCat = category.ID";
+                                        $result = mysqli_query($connection, $query);
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo "<tr>";
+                                            echo "<td>" . $row['ID'] . "</td>";
+                                            echo "<td>" . $row['naim'] . "</td>";
+                                            echo "<td>" . $row['opis'] . "</td>";
+                                            echo "<td>" . $row['cena'] . "</td>";
+                                            echo "<td><img src=img/" . $row['photo'] . " alt=''></td>";
+                                            echo "<td>" . $row['nazv'] . "</td>";
+                                            echo "</tr>";
+                                        }
+                                    } elseif ($table_name == 'cart') {
+                                        $query = "SELECT cart.ID, cart.idZak, tovar.naim, cart.kolvoTov FROM cart inner join tovar on cart.idTov = tovar.ID order by cart.ID asc";
+                                        $result = mysqli_query($connection, $query);
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>";
+                                            foreach ($row as $value) {
+                                                echo "<td>" . $value . "</td>";
+                                            }
+                                            echo "</tr>";
+                                        }
+                                    } else {
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            echo "<tr>";
+                                            foreach ($row as $value) {
+                                                echo "<td>" . $value . "</td>";
+                                            }
+                                            echo "</tr>";
+                                        }
+                                    }
+                                    echo "</tbody>";
+                                    echo "</table>";
+                                    echo "</div>";
 
 
-                        echo "<br><br>";
-                        echo "<form action='insDel.php' method='POST' id='send'>";
+                                    echo "<br><br>";
+                                    echo "<form action='insDel.php' method='POST' id='send'>";
 
-                        if ($table_name == 'users') {
-                        echo "<div class = 'container centered dobavUdal'>";
-                        echo "<div class = 'dobavBlock' id = 'dobav'>";
-                        echo "<h2 style = 'color:white'>Добавление</h2>";
-                        
-                            echo "<div class = 'inp'><input name = 'FIO' id = 'FIOCheck' class='inpInf userField' placeholder = 'ФИО'></input></div>";
-                            echo "<div class = 'inp'><input name = 'email' id = 'mailCheck' class='inpInf userField' placeholder = 'E-Mail'></input></div>";
-                            echo "<div class='inp'><input name = 'dataRozd' id = 'dateCheck' onfocus=\"this.type='date'\" onblur=\"this.type='text'\" class='inpInf userField' placeholder='Дата рождения'></div>";
-                            echo "<div class = 'inp'><input name = 'kolvoBonus' id = 'kolvoBonusCheck' class='inpInf userField' placeholder = 'Кол-во бонусных баллов'></input></div>";
-                            echo "<div class = 'inp'><input name = 'parol' id = 'passCheck' class='inpInf userField' placeholder = 'Пароль'></input></div>";
-                            echo "<div class = 'inp'><input name = 'activCode' id = 'activationCheck' class='inpInf userField' placeholder = 'Код активации профиля'></input></div>";
-                            echo "<div class = 'inp'><select name = 'status' class='inpInf selDobav' placeholder = 'Статус активации профиля'>
+                                    if ($table_name == 'users') {
+                                        echo "<div class = 'container centered dobavUdal'>";
+                                        echo "<div class = 'dobavBlock' id = 'dobav'>";
+                                        echo "<h2 style = 'color:white'>Добавление</h2>";
+
+                                        echo "<div class = 'inp'><input name = 'FIO' id = 'FIOCheck' class='inpInf userField' placeholder = 'ФИО'></input></div>";
+                                        echo "<div class = 'inp'><input name = 'email' id = 'mailCheck' class='inpInf userField' placeholder = 'E-Mail'></input></div>";
+                                        echo "<div class='inp'><input name = 'dataRozd' id = 'dateCheck' onfocus=\"this.type='date'\" onblur=\"this.type='text'\" class='inpInf userField' placeholder='Дата рождения'></div>";
+                                        echo "<div class = 'inp'><input name = 'kolvoBonus' id = 'kolvoBonusCheck' class='inpInf userField' placeholder = 'Кол-во бонусных баллов'></input></div>";
+                                        echo "<div class = 'inp'><input name = 'parol' id = 'passCheck' class='inpInf userField' placeholder = 'Пароль'></input></div>";
+                                        echo "<div class = 'inp'><input name = 'activCode' id = 'activationCheck' class='inpInf userField' placeholder = 'Код активации профиля'></input></div>";
+                                        echo "<div class = 'inp'><select name = 'status' class='inpInf selDobav' placeholder = 'Статус активации профиля'>
                             <option class = 'dobavOption'>Статус активации профиля - 1</option>
                             <option class = 'dobavOption'>Статус активации профиля - 0</option>
                             </select></div>";
-                            echo "<button name = 'sub' value = 'dobav' type = 'submit' class = 'dobavButton'>Добавить</button>";
-                        
-                        echo "</div>";
+                                        echo "<button name = 'sub' value = 'dobav' type = 'submit' class = 'dobavButton'>Добавить</button>";
 
-                        echo "<div class = 'udalBlock'>";
-                        echo "<h2 style = 'color:white'>Удаление</h2>";
-                        echo "<div class = 'inp'><select id = 'del' class='selectUdal minimal dropdown-menu'>";
-                        $query = "SELECT ID, FIO FROM users";
-                        $result = mysqli_query($connection, $query);
-                        while ($row = mysqli_fetch_array($result)) 
-                        {
-                            echo "<option name = 'forUdal' value = ".$row['ID'].">".$row['FIO']."</option>";
-                        }
-                        echo "</select></div>";
+                                        echo "</div>";
 
-                        echo "<button id = 'delButton' name = 'sub' value = 'udal' type = 'button' class = 'dobavButton'>Удалить</button>";
-                        echo "</div>";
+                                        echo "<div class = 'udalBlock'>";
+                                        echo "<h2 style = 'color:white'>Удаление</h2>";
+                                        echo "<div class = 'inp'><select id = 'del' class='selectUdal minimal dropdown-menu'>";
+                                        $query = "SELECT ID, FIO FROM users";
+                                        $result = mysqli_query($connection, $query);
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo "<option name = 'forUdal' value = " . $row['ID'] . ">" . $row['FIO'] . "</option>";
+                                        }
+                                        echo "</select></div>";
 
-                        echo "</div>";
-                    }elseif ($table_name == 'zakazy') {
-                        echo "<div class = 'container centered dobavUdal'>";
-                        echo "<div class = 'dobavBlock' id = 'dobav'>";
-                        echo "<h2 style = 'color:white'>Добавление</h2>";
-                        
-                            echo "<div class = 'inp'><select name = 'userID' class='inpInf selDobav' placeholder = 'ФИО пользователя'>";
-                            $query = "SELECT ID, FIO FROM users";
-                            $result = mysqli_query($connection, $query);
-                            while ($row = mysqli_fetch_array($result)) 
-                            {
-                                echo "<option class = 'dobavOption' value = ".$row['ID'].">".$row['FIO']."</option>";
+                                        echo "<button id = 'delButton' name = 'sub' value = 'udal' type = 'button' class = 'dobavButton'>Удалить</button>";
+                                        echo "</div>";
+
+                                        echo "</div>";
+                                    } elseif ($table_name == 'zakazy') {
+                                        echo "<div class = 'container centered dobavUdal'>";
+                                        echo "<div class = 'dobavBlock' id = 'dobav'>";
+                                        echo "<h2 style = 'color:white'>Добавление</h2>";
+
+                                        echo "<div class = 'inp'><select name = 'userID' class='inpInf selDobav' placeholder = 'ФИО пользователя'>";
+                                        $query = "SELECT ID, FIO FROM users";
+                                        $result = mysqli_query($connection, $query);
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo "<option class = 'dobavOption' value = " . $row['ID'] . ">" . $row['FIO'] . "</option>";
+                                        }
+                                        echo "</select></div>";
+                                        echo "<div class='inp'><input name = 'dataZakaza' id = 'dateCheck2' onfocus=\"this.type='date'\" onblur=\"this.type='text'\" class='inpInf userField' placeholder='Дата заказа'></div>";
+                                        echo "<div class='inp'><input name = 'vremyaZak' id = 'timeCheck' onfocus=\"this.type='time'\" onblur=\"this.type='text'\" class='inpInf userField' placeholder='Время заказа'></div>";
+                                        echo "<div class = 'inp'><input name = 'sumZak' id = 'sumCheck' class='inpInf userField' placeholder = 'Сумма заказа, руб.'></input></div>";
+                                        echo "<button name = 'sub' value = 'dobav' type = 'submit' class = 'dobavButton'>Добавить</button>";
+
+                                        echo "</div>";
+
+                                        echo "<div class = 'udalBlock'>";
+                                        echo "<h2 style = 'color:white'>Удаление</h2>";
+                                        echo "<div class = 'inp'><select id = 'del' class='selectUdal minimal dropdown-menu'>";
+                                        $query = "SELECT ID FROM zakazy order by ID asc";
+                                        $result = mysqli_query($connection, $query);
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo "<option name = 'forUdal' value = " . $row['ID'] . ">" . $row['ID'] . "</option>";
+                                        }
+                                        echo "</select></div>";
+
+                                        echo "<button id = 'delButton' name = 'sub' value = 'udal' type = 'button' class = 'dobavButton'>Удалить</button>";
+                                        echo "</div>";
+
+                                        echo "</div>";
+                                    } elseif ($table_name == 'tovar') {
+                                        echo "<div class = 'container centered dobavUdal'>";
+                                        echo "<div class = 'dobavBlock' id = 'dobav'>";
+                                        echo "<h2 style = 'color:white'>Добавление</h2>";
+
+                                        echo "<div class = 'inp'><input name = 'naim' id = 'nazvCheck' class='inpInf userField' placeholder = 'Наименование'></input></div>";
+                                        echo "<div class = 'inp'><input name = 'opis' id = 'opisCheck' class='inpInf userField' placeholder = 'Описание'></input></div>";
+                                        echo "<div class = 'inp'><input name = 'cena' id = 'cenaCheck' class='inpInf userField' placeholder = 'Цена, руб.'></input></div>";
+                                        echo "<div class = 'inp'><input name = 'photo' id = 'fotoCheck' class='inpInf userField' placeholder = 'Фото'></input></div>";
+                                        echo "<div class = 'inp'><select name = 'cat' class='inpInf selDobav' placeholder = 'Название категории'>";
+                                        $query = "SELECT ID, nazv FROM category";
+                                        $result = mysqli_query($connection, $query);
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo "<option class = 'dobavOption' value = " . $row['ID'] . ">" . $row['nazv'] . "</option>";
+                                        }
+                                        echo "</select></div>";
+                                        echo "<button name = 'sub' value = 'dobav' type = 'submit' class = 'dobavButton'>Добавить</button>";
+
+                                        echo "</div>";
+
+                                        echo "<div class = 'udalBlock'>";
+                                        echo "<h2 style = 'color:white'>Удаление</h2>";
+                                        echo "<div class = 'inp'><select id = 'del' class='selectUdal minimal dropdown-menu'>";
+                                        $query = "SELECT ID, naim, opis FROM tovar";
+                                        $result = mysqli_query($connection, $query);
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo "<option name = 'forUdal' value = " . $row['ID'] . ">" . $row['naim'] . ", " . $row['opis'] . "</option>";
+                                        }
+                                        echo "</select></div>";
+
+                                        echo "<button id = 'delButton' name = 'sub' value = 'udal' type = 'button' class = 'dobavButton'>Удалить</button>";
+                                        echo "</div>";
+
+                                        echo "</div>";
+                                    } elseif ($table_name == 'category') {
+                                        echo "<div class = 'container centered dobavUdal'>";
+                                        echo "<div class = 'dobavBlock' id = 'dobav'>";
+                                        echo "<h2 style = 'color:white'>Добавление</h2>";
+
+                                        echo "<div class = 'inp'><input name = 'categoryInp' id = 'nazvCatCheck' class='inpInf userField' placeholder = 'Название категории'></input></div>";
+                                        echo "<button name = 'sub' value = 'dobav' type = 'submit' class = 'dobavButton'>Добавить</button>";
+
+                                        echo "</div>";
+
+                                        echo "<div class = 'udalBlock'>";
+                                        echo "<h2 style = 'color:white'>Удаление</h2>";
+                                        echo "<div class = 'inp'><select id = 'del' class='selectUdal minimal dropdown-menu'>";
+                                        $query = "SELECT ID, nazv FROM category";
+                                        $result = mysqli_query($connection, $query);
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo "<option name = 'forUdal' value = " . $row['ID'] . ">" . $row['nazv'] . "</option>";
+                                        }
+                                        echo "</select></div>";
+
+                                        echo "<button id = 'delButton' name = 'sub' value = 'udal' type = 'button' class = 'dobavButton'>Удалить</button>";
+                                        echo "</div>";
+
+                                        echo "</div>";
+                                    } elseif ($table_name == 'cart') {
+                                        echo "<div class = 'container centered dobavUdal'>";
+                                        echo "<div class = 'dobavBlock' id = 'dobav'>";
+                                        echo "<h2 style = 'color:white'>Добавление</h2>";
+
+                                        echo "<div class = 'inp'><select name = 'idZak' class='inpInf selDobav' placeholder = 'ID zakaza'>";
+                                        $query = "SELECT ID FROM zakazy order by ID asc";
+                                        $result = mysqli_query($connection, $query);
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo "<option class = 'dobavOption' value = " . $row['ID'] . ">" . $row['ID'] . "</option>";
+                                        }
+                                        echo "</select></div>";
+                                        echo "<div class = 'inp'><select name = 'idTov' class='inpInf selDobav' placeholder = 'ID zakaza'>";
+                                        $query = "SELECT ID, naim FROM tovar";
+                                        $result = mysqli_query($connection, $query);
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo "<option class = 'dobavOption' value = " . $row['ID'] . ">" . $row['naim'] . "</option>";
+                                        }
+                                        echo "</select></div>";
+                                        echo "<div class = 'inp'><input name = 'kolvo' id = 'kolvoCheck' class='inpInf' placeholder = 'Кол-во товаров'></input></div>";
+                                        echo "<button name = 'sub' value = 'dobav' type = 'submit' class = 'dobavButton'>Добавить</button>";
+
+                                        echo "</div>";
+
+                                        echo "<div class = 'udalBlock'>";
+                                        echo "<h2 style = 'color:white'>Удаление</h2>";
+                                        echo "<div class = 'inp'><select id = 'del' class='selectUdal minimal dropdown-menu'>";
+                                        $query = "SELECT ID FROM cart order by ID asc";
+                                        $result = mysqli_query($connection, $query);
+                                        while ($row = mysqli_fetch_array($result)) {
+                                            echo "<option name = 'forUdal' value = " . $row['ID'] . ">" . $row['ID'] . "</option>";
+                                        }
+                                        echo "</select></div>";
+
+                                        echo "<button id = 'delButton' name = 'sub' value = 'udal' type = 'button' class = 'dobavButton'>Удалить</button>";
+                                        echo "</div>";
+
+                                        echo "</div>";
+                                    }
+                                    echo "</form>";
+                                } else {
+                                    $table_name = 'null';
+                                    setcookie("table_name", $table_name);
+                                }
                             }
-                            echo "</select></div>";
-                            echo "<div class='inp'><input name = 'dataZakaza' id = 'dateCheck2' onfocus=\"this.type='date'\" onblur=\"this.type='text'\" class='inpInf userField' placeholder='Дата заказа'></div>";
-                            echo "<div class='inp'><input name = 'vremyaZak' id = 'timeCheck' onfocus=\"this.type='time'\" onblur=\"this.type='text'\" class='inpInf userField' placeholder='Время заказа'></div>";
-                            echo "<div class = 'inp'><input name = 'sumZak' id = 'sumCheck' class='inpInf userField' placeholder = 'Сумма заказа, руб.'></input></div>";
-                            echo "<button name = 'sub' value = 'dobav' type = 'submit' class = 'dobavButton'>Добавить</button>";
-                        
-                        echo "</div>";
-
-                        echo "<div class = 'udalBlock'>";
-                        echo "<h2 style = 'color:white'>Удаление</h2>";
-                        echo "<div class = 'inp'><select id = 'del' class='selectUdal minimal dropdown-menu'>";
-                        $query = "SELECT ID FROM zakazy order by ID asc";
-                        $result = mysqli_query($connection, $query);
-                        while ($row = mysqli_fetch_array($result)) 
-                        {
-                            echo "<option name = 'forUdal' value = ".$row['ID'].">".$row['ID']."</option>";
+                        } else {
+                            $table_name = 'null';
+                            setcookie("table_name", $table_name);
                         }
-                        echo "</select></div>";
-
-                        echo "<button id = 'delButton' name = 'sub' value = 'udal' type = 'button' class = 'dobavButton'>Удалить</button>";
-                        echo "</div>";
-
-                        echo "</div>";
-                    }elseif ($table_name == 'tovar') {
-                        echo "<div class = 'container centered dobavUdal'>";
-                        echo "<div class = 'dobavBlock' id = 'dobav'>";
-                        echo "<h2 style = 'color:white'>Добавление</h2>";
-                        
-                            echo "<div class = 'inp'><input name = 'naim' id = 'nazvCheck' class='inpInf userField' placeholder = 'Наименование'></input></div>";
-                            echo "<div class = 'inp'><input name = 'opis' id = 'opisCheck' class='inpInf userField' placeholder = 'Описание'></input></div>";
-                            echo "<div class = 'inp'><input name = 'cena' id = 'cenaCheck' class='inpInf userField' placeholder = 'Цена, руб.'></input></div>";
-                            echo "<div class = 'inp'><input name = 'photo' id = 'fotoCheck' class='inpInf userField' placeholder = 'Фото'></input></div>";
-                            echo "<div class = 'inp'><select name = 'cat' class='inpInf selDobav' placeholder = 'Название категории'>";
-                            $query = "SELECT ID, nazv FROM category";
-                            $result = mysqli_query($connection, $query);
-                            while ($row = mysqli_fetch_array($result)) 
-                            {
-                                echo "<option class = 'dobavOption' value = ".$row['ID'].">".$row['nazv']."</option>";
-                            }
-                            echo "</select></div>";
-                            echo "<button name = 'sub' value = 'dobav' type = 'submit' class = 'dobavButton'>Добавить</button>";
-                        
-                        echo "</div>";
-
-                        echo "<div class = 'udalBlock'>";
-                        echo "<h2 style = 'color:white'>Удаление</h2>";
-                        echo "<div class = 'inp'><select id = 'del' class='selectUdal minimal dropdown-menu'>";
-                        $query = "SELECT ID, naim, opis FROM tovar";
-                        $result = mysqli_query($connection, $query);
-                        while ($row = mysqli_fetch_array($result)) 
-                        {
-                            echo "<option name = 'forUdal' value = ".$row['ID'].">".$row['naim'].", ".$row['opis']."</option>";
-                        }
-                        echo "</select></div>";
-
-                        echo "<button id = 'delButton' name = 'sub' value = 'udal' type = 'button' class = 'dobavButton'>Удалить</button>";
-                        echo "</div>";
-
-                        echo "</div>";
-                    }elseif ($table_name == 'category') {
-                        echo "<div class = 'container centered dobavUdal'>";
-                        echo "<div class = 'dobavBlock' id = 'dobav'>";
-                        echo "<h2 style = 'color:white'>Добавление</h2>";
-                        
-                            echo "<div class = 'inp'><input name = 'categoryInp' id = 'nazvCatCheck' class='inpInf userField' placeholder = 'Название категории'></input></div>";
-                            echo "<button name = 'sub' value = 'dobav' type = 'submit' class = 'dobavButton'>Добавить</button>";
-                        
-                        echo "</div>";
-
-                        echo "<div class = 'udalBlock'>";
-                        echo "<h2 style = 'color:white'>Удаление</h2>";
-                        echo "<div class = 'inp'><select id = 'del' class='selectUdal minimal dropdown-menu'>";
-                        $query = "SELECT ID, nazv FROM category";
-                        $result = mysqli_query($connection, $query);
-                        while ($row = mysqli_fetch_array($result)) 
-                        {
-                            echo "<option name = 'forUdal' value = ".$row['ID'].">".$row['nazv']."</option>";
-                        }
-                        echo "</select></div>";
-
-                        echo "<button id = 'delButton' name = 'sub' value = 'udal' type = 'button' class = 'dobavButton'>Удалить</button>";
-                        echo "</div>";
-
-                        echo "</div>";
-                    }elseif ($table_name == 'cart') {
-                        echo "<div class = 'container centered dobavUdal'>";
-                        echo "<div class = 'dobavBlock' id = 'dobav'>";
-                        echo "<h2 style = 'color:white'>Добавление</h2>";
-                        
-                            echo "<div class = 'inp'><select name = 'idZak' class='inpInf selDobav' placeholder = 'ID zakaza'>";
-                            $query = "SELECT ID FROM zakazy order by ID asc";
-                            $result = mysqli_query($connection, $query);
-                            while ($row = mysqli_fetch_array($result)) 
-                            {
-                                echo "<option class = 'dobavOption' value = ".$row['ID'].">".$row['ID']."</option>";
-                            }
-                            echo "</select></div>";
-                            echo "<div class = 'inp'><select name = 'idTov' class='inpInf selDobav' placeholder = 'ID zakaza'>";
-                            $query = "SELECT ID, naim FROM tovar";
-                            $result = mysqli_query($connection, $query);
-                            while ($row = mysqli_fetch_array($result)) 
-                            {
-                                echo "<option class = 'dobavOption' value = ".$row['ID'].">".$row['naim']."</option>";
-                            }
-                            echo "</select></div>";
-                            echo "<div class = 'inp'><input name = 'kolvo' id = 'kolvoCheck' class='inpInf' placeholder = 'Кол-во товаров'></input></div>";
-                            echo "<button name = 'sub' value = 'dobav' type = 'submit' class = 'dobavButton'>Добавить</button>";
-                        
-                        echo "</div>";
-
-                        echo "<div class = 'udalBlock'>";
-                        echo "<h2 style = 'color:white'>Удаление</h2>";
-                        echo "<div class = 'inp'><select id = 'del' class='selectUdal minimal dropdown-menu'>";
-                        $query = "SELECT ID FROM cart order by ID asc";
-                        $result = mysqli_query($connection, $query);
-                        while ($row = mysqli_fetch_array($result)) 
-                        {
-                            echo "<option name = 'forUdal' value = ".$row['ID'].">".$row['ID']."</option>";
-                        }
-                        echo "</select></div>";
-
-                        echo "<button id = 'delButton' name = 'sub' value = 'udal' type = 'button' class = 'dobavButton'>Удалить</button>";
-                        echo "</div>";
-
-                        echo "</div>";
-                    }
-                        echo "</form>";
-                    }
-                    else
-                    {
-                        $table_name = 'null';
-                        setcookie("table_name", $table_name);
-                    }
-                }
-            }
-            else
-            {
-                $table_name = 'null';
-                setcookie("table_name", $table_name);
-            }
 
 
-            
 
-            
-         ?>
+
+
+                        ?>
 
     <script src="js.cookie.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

@@ -17,27 +17,25 @@
         <?php
 
         include 'db.php';
-        $msg='';
+        $msg = '';
         $check = 0;
         $success = false;
-        if(!empty($_POST['email']) && isset($_POST['email']) &&  !empty($_POST['password']) &&  isset($_POST['password']) )
-        {
+        if (!empty($_POST['email']) && isset($_POST['email']) &&  !empty($_POST['password']) &&  isset($_POST['password'])) {
             $check = 1;
             // имя пользователя и пароль отправлены из формы
-            $email=$_POST['email'];
-            $password=$_POST['password'];
-            $FIO=$_POST['FIO'];
-            $date=$_POST['dataRoz'];
-            $passCheck=$_POST['repeatPass'];
+            $email = $_POST['email'];
+            $password = $_POST['password'];
+            $FIO = $_POST['FIO'];
+            $date = $_POST['dataRoz'];
+            $passCheck = $_POST['repeatPass'];
             // регулярное выражение для проверки написания адреса электронной почты
-            
+
             //$password=md5($password); // encrypted password
-            $activation=md5($email.time()); // encrypted email+timestamp
-            $count=mysqli_query($connection,"SELECT ID FROM users WHERE email='$email'");
+            $activation = md5($email . time()); // encrypted email+timestamp
+            $count = mysqli_query($connection, "SELECT ID FROM users WHERE email='$email'");
             $id = mt_rand(100000, 999999);
             // проверка адреса электронной почты
-            if(mysqli_num_rows($count) < 1)
-            {
+            if (mysqli_num_rows($count) < 1) {
                 echo "<script>swal({
                 color: '#fff',
                 title: 'Регистрация выполнена успешно, пожалуйста, проверьте электронную почту.',
@@ -48,22 +46,20 @@
                 });</script>";
                 //$msg = "";
                 $success = true;
-                mysqli_query($connection,"INSERT INTO users VALUES('$id','$FIO', '$email', '$date', 0, '$password','$activation', default)");
+                mysqli_query($connection, "INSERT INTO users VALUES('$id','$FIO', '$email', '$date', 0, '$password','$activation', default)");
                 // отправка письма на электронный ящик
                 include 'smtp/Send_Mail.php';
-                $to=$email;
-                $subject="Подтверждение электронной почты";
-                $body='Здравствуйте! <br/> <br/> Пожалуйста, подтвердите адрес вашей электронной почты, и можете начать использовать ваш аккаунт на сайте. <br/> <br/> <a href="'.$base_url.'activation.php?code='.$activation.'">'.$base_url.'activation/'.$activation.'</a>';
+                $to = $email;
+                $subject = "Подтверждение электронной почты";
+                $body = 'Здравствуйте! <br/> <br/> Пожалуйста, подтвердите адрес вашей электронной почты, и можете начать использовать ваш аккаунт на сайте. <br/> <br/> <a href="' . $base_url . 'activation.php?code=' . $activation . '">' . $base_url . 'activation/' . $activation . '</a>';
 
-                
-                Send_Mail($to,$subject,$body);
-                
+
+                Send_Mail($to, $subject, $body);
+
+            } else {
+                $msg = 'Данный адрес электронный почты уже занят, пожалуйста, введите другой. ';
             }
-            else
-            {
-                $msg= 'Данный адрес электронный почты уже занят, пожалуйста, введите другой. '; 
-            }
-            
+
         }
         ?>
         <script src="https://kit.fontawesome.com/b488d68d7d.js" crossorigin="anonymous"></script> 
@@ -85,25 +81,23 @@
                         <?php
 
                         if (!isset($_COOKIE["admin"]) or !isset($_COOKIE["user"])) {
-                                setcookie("admin", 0);
-                                setcookie("user", 0);
-                            }
-                            
-                            if ($_COOKIE["admin"] == 1)
-                            {
-                                 echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
+                            setcookie("admin", 0);
+                            setcookie("user", 0);
+                        }
 
-                            if ($_COOKIE["user"] == 1)
-                            {
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
+        if ($_COOKIE["admin"] == 1) {
+            echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
+            echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+        }
 
-                            if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
-                                echo "<li class = 'active'><a href='loginForm.php'>Вход</a></li>";
-                            }
-                        ?>
+        if ($_COOKIE["user"] == 1) {
+            echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+        }
+
+        if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
+            echo "<li class = 'active'><a href='loginForm.php'>Вход</a></li>";
+        }
+        ?>
                     </ul>
                 </div>
             </div>
@@ -115,19 +109,19 @@
 
 <div class="container1">
         <div class="login-container">
-            <?php 
+            <?php
 
             if ($check == 0) {
                 echo "<input id='item-1' type='radio' name='item' class='sign-in' checked><label for='item-1' class='item'>Вход</label>";
                 echo "<input id='item-2' type='radio' name='item' class='sign-up'><label for='item-2' class='item'>Регистрация</label>";
-            }elseif ($check == 1) {
+            } elseif ($check == 1) {
                 echo "<input id='item-1' type='radio' name='item' class='sign-in'><label for='item-1' class='item'>Вход</label>";
                 echo "<input id='item-2' type='radio' name='item' class='sign-up' checked><label for='item-2' class='item'>Регистрация</label>";
             }
-                
-            
-            
-            ?>
+
+
+
+        ?>
 
             <div class="login-form">
                 <form action="signIn.php" method="POST" id="sendLogin">
@@ -144,12 +138,12 @@
                     </div>
                     <div class="hr"></div>
                     <div class="footer">
-                        <p class='msg' id='errormsg'><?php 
-                        if (!empty($_GET['error'])) {
-                            echo $_GET['error'] ;
-                        }
-                        
-                        ?></p>
+                        <p class='msg' id='errormsg'><?php
+                    if (!empty($_GET['error'])) {
+                        echo $_GET['error'] ;
+                    }
+
+        ?></p>
                         <!--<a href="#forgot">Забыли пароль?</a>-->
                     </div>
                 </div>
