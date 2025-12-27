@@ -35,13 +35,13 @@ if ($dobOrDel == 'dobav') {
             echo "Ошибка";
         }
         mysqli_close($connection);
-    } elseif ($table == 'zakazy') {
+    } elseif ($table == 'orders') {
         $a = $_POST["userID"];
         $b = $_POST["dataZakaza"];
         $c = $_POST["vremyaZak"];
         $d = $_POST["sumZak"];
 
-        $query = mysqli_query($connection, "insert into zakazy values(default, '$a', '$b', '$c', $d)");
+        $query = mysqli_query($connection, "insert into orders values(default, '$a', '$b', '$c', $d)");
         if ($query == true) {
 
             header("Location: adminPanel.php");
@@ -102,10 +102,10 @@ if ($dobOrDel == 'dobav') {
         mysqli_close($connection);
     }
 
-    if ($table == 'zakazy') {
+    if ($table == 'orders') {
         $a = $_POST["forUdal"];
 
-        $query = mysqli_query($connection, "delete from zakazy where ID=$a");
+        $query = mysqli_query($connection, "delete from orders where ID=$a");
         if ($query == true) {
             header("Location: adminPanel.php");
         } else {

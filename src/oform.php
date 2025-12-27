@@ -6,7 +6,7 @@ include 'db.php';
 $isBonus = $_POST['bonus'];
 
 $a = $_SESSION['order'];
-$sql3 = "SELECT bonusPoints FROM users inner join zakazy on users.ID = zakazy.idUser where zakazy.ID='$a'";
+$sql3 = "SELECT bonusPoints FROM users inner join orders on users.ID = orders.idUser where orders.ID='$a'";
 $result3 = mysqli_query($connection, $sql3);
 $row3 = mysqli_fetch_array($result3);
 $bonusPointsVal = $row3['bonusPoints'];
@@ -34,10 +34,10 @@ if ($isBonus == 1) {
 
 
 
-$query = mysqli_query($connection, "update zakazy set idUser='$user', dateZak = CURDATE(), vremyaZak = CURTIME(), sumZakaza = '$sum' where ID='$a'; ");
+$query = mysqli_query($connection, "update orders set idUser='$user', dateZak = CURDATE(), vremyaZak = CURTIME(), sumZakaza = '$sum' where ID='$a'; ");
 
 unset($_SESSION['order']);
-$query = mysqli_query($connection, "insert into zakazy values (default, '$user', 1999-01-01, '00:00:00', 0); ");
+$query = mysqli_query($connection, "insert into orders values (default, '$user', 1999-01-01, '00:00:00', 0); ");
 $_SESSION['kolvo'] = 0;
 $_SESSION['successZak'] = 1;
 header("Location: MenuPage.php");

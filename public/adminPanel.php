@@ -130,7 +130,7 @@
                                     <th>Код активации профиля</th>
                                     <th>Статус активации профиля</th>
                                   </tr>";
-                                    } elseif ($table_name == 'zakazy') {
+                                    } elseif ($table_name == 'orders') {
 
                                         echo "<tr>
                                     <th>ID</th>
@@ -168,8 +168,8 @@
                                     echo "</thead>";
                                     echo "<tbody>";
 
-                                    if ($table_name == 'zakazy') {
-                                        $query = "SELECT zakazy.ID, users.FIO, zakazy.dateZak, zakazy.vremyaZak, zakazy.sumZakaza FROM zakazy inner join users on zakazy.idUser = users.ID order by id asc";
+                                    if ($table_name == 'orders') {
+                                        $query = "SELECT orders.ID, users.FIO, orders.dateZak, orders.vremyaZak, orders.sumZakaza FROM orders inner join users on orders.idUser = users.ID order by id asc";
                                         $result = mysqli_query($connection, $query);
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             echo "<tr>";
@@ -251,7 +251,7 @@
                                         echo "</div>";
 
                                         echo "</div>";
-                                    } elseif ($table_name == 'zakazy') {
+                                    } elseif ($table_name == 'orders') {
                                         echo "<div class = 'container centered dobavUdal'>";
                                         echo "<div class = 'dobavBlock' id = 'dobav'>";
                                         echo "<h2 style = 'color:white'>Добавление</h2>";
@@ -273,7 +273,7 @@
                                         echo "<div class = 'udalBlock'>";
                                         echo "<h2 style = 'color:white'>Удаление</h2>";
                                         echo "<div class = 'inp'><select id = 'del' class='selectUdal minimal dropdown-menu'>";
-                                        $query = "SELECT ID FROM zakazy order by ID asc";
+                                        $query = "SELECT ID FROM orders order by ID asc";
                                         $result = mysqli_query($connection, $query);
                                         while ($row = mysqli_fetch_array($result)) {
                                             echo "<option name = 'forUdal' value = " . $row['ID'] . ">" . $row['ID'] . "</option>";
@@ -348,7 +348,7 @@
                                         echo "<h2 style = 'color:white'>Добавление</h2>";
 
                                         echo "<div class = 'inp'><select name = 'idZak' class='inpInf selDobav' placeholder = 'ID zakaza'>";
-                                        $query = "SELECT ID FROM zakazy order by ID asc";
+                                        $query = "SELECT ID FROM orders order by ID asc";
                                         $result = mysqli_query($connection, $query);
                                         while ($row = mysqli_fetch_array($result)) {
                                             echo "<option class = 'dobavOption' value = " . $row['ID'] . ">" . $row['ID'] . "</option>";
@@ -427,9 +427,9 @@
                     var option = document.getElementById('users');
                     option.selected = true;
                 }
-                else if (n == 'zakazy') 
+                else if (n == 'orders') 
                 {
-                    var option = document.getElementById('zakazy');
+                    var option = document.getElementById('orders');
                     option.selected = true;
                 }
                 else if (n == 'tovar') 
@@ -583,7 +583,7 @@ if (Cookies.get('table_name') == 'users') {
                     e.preventDefault();
                     return false;
                 }
-}else if(Cookies.get('table_name') == 'zakazy'){
+}else if(Cookies.get('table_name') == 'orders'){
                 if (Date.parse(document.getElementById('dateCheck2').value) >= new Date()) 
                 {
                     swal({

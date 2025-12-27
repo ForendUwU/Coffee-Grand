@@ -83,7 +83,7 @@
                     <?php
                         session_start();
                         include 'db.php';
-                        $sql = 'SELECT dateZak, sumZakaza FROM zakazy where idUser=' . $_COOKIE["userID"] . ' and dateZak != 0000-00-00';
+                        $sql = 'SELECT dateZak, sumZakaza FROM orders where idUser=' . $_COOKIE["userID"] . ' and dateZak != 0000-00-00';
                         $result = mysqli_query($connection, $sql);
 
                         if (mysqli_num_rows($result) > 0) {

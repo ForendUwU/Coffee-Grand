@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Coffee Grand</title>
-        <link rel="stylesheet" href="Bootstrap/css/bootstrap.css">
-         
-        <link rel="stylesheet" href="Bootstrap/css/fontawesome.min.css">
-        <link rel="stylesheet" href="styles.css">
-    </head>
+    <?php
+        include 'templates/header.php';
+    ?>
     <body>
         <script src="https://kit.fontawesome.com/b488d68d7d.js" crossorigin="anonymous"></script> 
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -28,9 +22,9 @@
                         <li><a href="sale.php">Скидка</a></li>
                         <?php
                         session_start();
-                        include 'db.php';
+                        include __DIR__ . '/../src/db.php';
                         //if (!isset($_SESSION["order"])) {
-                        $sql = 'SELECT max(ID) as maxId FROM zakazy';
+                        $sql = 'SELECT max(ID) as maxId FROM orders';
                         $result = mysqli_query($connection, $sql);
                         $row = mysqli_fetch_array($result);
                         $_SESSION["order"] = $row['maxId'];
@@ -145,7 +139,7 @@
                         }
                         if (isset($_POST["addBtn"])) {
                             if (!isset($_SESSION["order"])) {
-                                $sql = 'SELECT max(ID) as maxId FROM zakazy';
+                                $sql = 'SELECT max(ID) as maxId FROM orders';
                                 $result = mysqli_query($connection, $sql);
                                 $row = mysqli_fetch_array($result);
                                 $_SESSION["order"] = $row['maxId'];

@@ -98,7 +98,7 @@
             }
             if (isset($_POST["addBtn"])) {
                 if (!isset($_SESSION["order"])) {
-                    $sql = 'SELECT max(ID) as maxId FROM zakazy';
+                    $sql = 'SELECT max(ID) as maxId FROM orders';
                     $result = mysqli_query($connection, $sql);
                     $row = mysqli_fetch_array($result);
                     $_SESSION["order"] = $row['maxId'];
