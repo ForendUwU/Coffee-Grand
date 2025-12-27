@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Coffee Grand</title>
-        <link rel="stylesheet" href="Bootstrap/css/bootstrap.css">
-        <link rel="stylesheet" href="Bootstrap/css/fontawesome.min.css">
-        <link rel="stylesheet" href="styles.css">
-    </head>
+    <?php
+        include 'templates/header.php';
+    ?>
     <body>
         <script src="https://kit.fontawesome.com/b488d68d7d.js" crossorigin="anonymous"></script> 
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -25,29 +20,27 @@
                         <li class="active"><a href="mainPage.php">Главная</a></li>
                         <li><a href="MenuPage.php">Меню</a></li>
                         <li><a href="sale.php">Скидка</a></li>
-                        <?php 
+                        <?php
                         //setcookie("admin", "", time() - 3600);
                         //setcookie("user", "", time() - 3600);
                             if (!isset($_COOKIE["admin"]) or !isset($_COOKIE["user"])) {
                                 //setcookie("admin", 0);
                                 //setcookie("user", 0);
                             }
-                            
-                            if (isset($_COOKIE["admin"]) && $_COOKIE["admin"] == 1)
-                            {
-                                echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
 
-                            if (isset($_COOKIE["user"]) && $_COOKIE["user"] == 1)
-                            {
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
+    if (isset($_COOKIE["admin"]) && $_COOKIE["admin"] == 1) {
+        echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
+        echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+    }
 
-                            if (isset($_COOKIE["admin"]) && isset($_COOKIE["user"]) && $_COOKIE["admin"] == 0 && $_COOKIE["user"] == 0) {
-                                echo "<li><a href='loginForm.php'>Вход</a></li>";
-                            }
-                        ?>
+    if (isset($_COOKIE["user"]) && $_COOKIE["user"] == 1) {
+        echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+    }
+
+    if (isset($_COOKIE["admin"]) && isset($_COOKIE["user"]) && $_COOKIE["admin"] == 0 && $_COOKIE["user"] == 0) {
+        echo "<li><a href='loginForm.php'>Вход</a></li>";
+    }
+    ?>
                     </ul>
                 </div>
             </div>

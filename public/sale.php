@@ -1,15 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Coffee Grand</title>
-        <link rel="stylesheet" href="Bootstrap/css/bootstrap.css">
-        <link rel="stylesheet" href="Bootstrap/css/fontawesome.min.css">
-        <link rel="stylesheet" href="styles.css">
-        <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-        <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    </head>
+    <?php
+        include 'templates/header.php';
+    ?>
     <body>
         <script src="https://kit.fontawesome.com/b488d68d7d.js" crossorigin="anonymous"></script> 
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -32,22 +25,20 @@
                                 setcookie("admin", 0);
                                 setcookie("user", 0);
                             }
-                            
-                            if ($_COOKIE["admin"] == 1)
-                            {
-                                echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
 
-                            if ($_COOKIE["user"] == 1)
-                            {
-                                 echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                            }
+    if ($_COOKIE["admin"] == 1) {
+        echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
+        echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+    }
 
-                            if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
-                                echo "<li><a href='loginForm.php'>Вход</a></li>";
-                            }
-                        ?>
+    if ($_COOKIE["user"] == 1) {
+        echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+    }
+
+    if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
+        echo "<li><a href='loginForm.php'>Вход</a></li>";
+    }
+    ?>
                     </ul>
                 </div>
             </div>
@@ -67,18 +58,16 @@
         <div class="qr">
             <div class="container">
                 <div class="row centered">
-                <?php 
+                <?php
                     include 'db.php';
-                    if ($_COOKIE["user"] == 1)
-                    {
-                        $user = $_COOKIE["userID"];
-                        echo "<img src='http://chart.apis.google.com/chart?cht=qr&chs=300x300&chl=".$user."'>";
-                    }
+    if ($_COOKIE["user"] == 1) {
+        $user = $_COOKIE["userID"];
+        echo "<img src='http://chart.apis.google.com/chart?cht=qr&chs=300x300&chl=" . $user . "'>";
+    }
 
-                    if ($_COOKIE["admin"] == 1)
-                    {
+    if ($_COOKIE["admin"] == 1) {
 
-                        echo "<video id='preview' class = 'embed-responsive-item'></video>
+        echo "<video id='preview' class = 'embed-responsive-item'></video>
                         <script type='text/javascript'>
                         let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
                         scanner.addListener('scan', function (content) {
@@ -111,19 +100,18 @@
                         <p id = 'res'></p>";
 
 
-                    }
+    }
 
-                    if ($_COOKIE["user"] == 0 && $_COOKIE["admin"] == 0) 
-                    {
-                        echo "<div class='container needEn'>
+    if ($_COOKIE["user"] == 0 && $_COOKIE["admin"] == 0) {
+        echo "<div class='container needEn'>
                             <div class='row centered'>
                             <h1>Для того, чтобы воспользоваться скидкой, войдите в свой профиль</h1>
                             </div>
                         </div>";
-                    }
+    }
 
-                
-                ?>
+
+    ?>
                 </div>
             </div>
         </div>
