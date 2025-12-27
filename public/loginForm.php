@@ -1,42 +1,32 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Coffee Grand</title>
-
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
-        
-        <link rel="stylesheet" href="Bootstrap/css/bootstrap.css">
-        <link rel="stylesheet" href="Bootstrap/css/fontawesome.min.css">
-        <link rel="stylesheet" href="styles.css">
-        <link rel="stylesheet" href="loginStyles.css">
-        
-    </head>
+    <?php
+        include 'templates/header.php';
+    ?>
     <body>
         <?php
 
         include 'db.php';
-        $msg = '';
-        $check = 0;
-        $success = false;
-        if (!empty($_POST['email']) && isset($_POST['email']) &&  !empty($_POST['password']) &&  isset($_POST['password'])) {
-            $check = 1;
-            // имя пользователя и пароль отправлены из формы
-            $email = $_POST['email'];
-            $password = $_POST['password'];
-            $FIO = $_POST['FIO'];
-            $date = $_POST['dataRoz'];
-            $passCheck = $_POST['repeatPass'];
-            // регулярное выражение для проверки написания адреса электронной почты
+    $msg = '';
+    $check = 0;
+    $success = false;
+    if (!empty($_POST['email']) && isset($_POST['email']) &&  !empty($_POST['password']) &&  isset($_POST['password'])) {
+        $check = 1;
+        // имя пользователя и пароль отправлены из формы
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $FIO = $_POST['FIO'];
+        $date = $_POST['dataRoz'];
+        $passCheck = $_POST['repeatPass'];
+        // регулярное выражение для проверки написания адреса электронной почты
 
-            //$password=md5($password); // encrypted password
-            $activation = md5($email . time()); // encrypted email+timestamp
-            $count = mysqli_query($connection, "SELECT ID FROM users WHERE email='$email'");
-            $id = mt_rand(100000, 999999);
-            // проверка адреса электронной почты
-            if (mysqli_num_rows($count) < 1) {
-                echo "<script>swal({
+        //$password=md5($password); // encrypted password
+        $activation = md5($email . time()); // encrypted email+timestamp
+        $count = mysqli_query($connection, "SELECT ID FROM users WHERE email='$email'");
+        $id = mt_rand(100000, 999999);
+        // проверка адреса электронной почты
+        if (mysqli_num_rows($count) < 1) {
+            echo "<script>swal({
                 color: '#fff',
                 title: 'Регистрация выполнена успешно, пожалуйста, проверьте электронную почту.',
                 width: '600px',
@@ -44,24 +34,24 @@
                 background: '#292929',
 
                 });</script>";
-                //$msg = "";
-                $success = true;
-                mysqli_query($connection, "INSERT INTO users VALUES('$id','$FIO', '$email', '$date', 0, '$password','$activation', default)");
-                // отправка письма на электронный ящик
-                include 'smtp/Send_Mail.php';
-                $to = $email;
-                $subject = "Подтверждение электронной почты";
-                $body = 'Здравствуйте! <br/> <br/> Пожалуйста, подтвердите адрес вашей электронной почты, и можете начать использовать ваш аккаунт на сайте. <br/> <br/> <a href="' . $base_url . 'activation.php?code=' . $activation . '">' . $base_url . 'activation/' . $activation . '</a>';
+            //$msg = "";
+            $success = true;
+            mysqli_query($connection, "INSERT INTO users VALUES('$id','$FIO', '$email', '$date', 0, '$password','$activation', default)");
+            // отправка письма на электронный ящик
+            include 'smtp/Send_Mail.php';
+            $to = $email;
+            $subject = "Подтверждение электронной почты";
+            $body = 'Здравствуйте! <br/> <br/> Пожалуйста, подтвердите адрес вашей электронной почты, и можете начать использовать ваш аккаунт на сайте. <br/> <br/> <a href="' . $base_url . 'activation.php?code=' . $activation . '">' . $base_url . 'activation/' . $activation . '</a>';
 
 
-                Send_Mail($to, $subject, $body);
+            Send_Mail($to, $subject, $body);
 
-            } else {
-                $msg = 'Данный адрес электронный почты уже занят, пожалуйста, введите другой. ';
-            }
-
+        } else {
+            $msg = 'Данный адрес электронный почты уже занят, пожалуйста, введите другой. ';
         }
-        ?>
+
+    }
+    ?>
         <script src="https://kit.fontawesome.com/b488d68d7d.js" crossorigin="anonymous"></script> 
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
@@ -80,24 +70,24 @@
                         <li><a href="sale.php">Скидка</a></li>
                         <?php
 
-                        if (!isset($_COOKIE["admin"]) or !isset($_COOKIE["user"])) {
-                            setcookie("admin", 0);
-                            setcookie("user", 0);
-                        }
+                    if (!isset($_COOKIE["admin"]) or !isset($_COOKIE["user"])) {
+                        setcookie("admin", 0);
+                        setcookie("user", 0);
+                    }
 
-        if ($_COOKIE["admin"] == 1) {
-            echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
-            echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-        }
+    if ($_COOKIE["admin"] == 1) {
+        echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
+        echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+    }
 
-        if ($_COOKIE["user"] == 1) {
-            echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-        }
+    if ($_COOKIE["user"] == 1) {
+        echo "<li><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+    }
 
-        if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
-            echo "<li class = 'active'><a href='loginForm.php'>Вход</a></li>";
-        }
-        ?>
+    if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
+        echo "<li class = 'active'><a href='loginForm.php'>Вход</a></li>";
+    }
+    ?>
                     </ul>
                 </div>
             </div>
@@ -111,17 +101,17 @@
         <div class="login-container">
             <?php
 
-            if ($check == 0) {
-                echo "<input id='item-1' type='radio' name='item' class='sign-in' checked><label for='item-1' class='item'>Вход</label>";
-                echo "<input id='item-2' type='radio' name='item' class='sign-up'><label for='item-2' class='item'>Регистрация</label>";
-            } elseif ($check == 1) {
-                echo "<input id='item-1' type='radio' name='item' class='sign-in'><label for='item-1' class='item'>Вход</label>";
-                echo "<input id='item-2' type='radio' name='item' class='sign-up' checked><label for='item-2' class='item'>Регистрация</label>";
-            }
+        if ($check == 0) {
+            echo "<input id='item-1' type='radio' name='item' class='sign-in' checked><label for='item-1' class='item'>Вход</label>";
+            echo "<input id='item-2' type='radio' name='item' class='sign-up'><label for='item-2' class='item'>Регистрация</label>";
+        } elseif ($check == 1) {
+            echo "<input id='item-1' type='radio' name='item' class='sign-in'><label for='item-1' class='item'>Вход</label>";
+            echo "<input id='item-2' type='radio' name='item' class='sign-up' checked><label for='item-2' class='item'>Регистрация</label>";
+        }
 
 
 
-        ?>
+    ?>
 
             <div class="login-form">
                 <form action="signIn.php" method="POST" id="sendLogin">
@@ -139,11 +129,11 @@
                     <div class="hr"></div>
                     <div class="footer">
                         <p class='msg' id='errormsg'><?php
-                    if (!empty($_GET['error'])) {
-                        echo $_GET['error'] ;
-                    }
+                if (!empty($_GET['error'])) {
+                    echo $_GET['error'] ;
+                }
 
-        ?></p>
+    ?></p>
                         <!--<a href="#forgot">Забыли пароль?</a>-->
                     </div>
                 </div>

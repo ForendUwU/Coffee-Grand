@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Coffee Grand</title>
-        <link rel="stylesheet" href="Bootstrap/css/bootstrap.css">
-        <link rel="stylesheet" href="Bootstrap/css/fontawesome.min.css">
-        <link rel="stylesheet" href="styles.css">
-    </head>
+    <?php
+        include 'templates/header.php';
+    ?>
     <body>
         <script src="https://kit.fontawesome.com/b488d68d7d.js" crossorigin="anonymous"></script> 
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -33,19 +28,19 @@
                                 setcookie("user", 0);
                             }
 
-                        if ($_COOKIE["admin"] == 1) {
-                            echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
-                            echo "<li class='active'><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                        }
+    if ($_COOKIE["admin"] == 1) {
+        echo "<li><a href='adminPanel.php'>Панель администратора</a></li>";
+        echo "<li class='active'><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+    }
 
-                        if ($_COOKIE["user"] == 1) {
-                            echo "<li  class='active'><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
-                        }
+    if ($_COOKIE["user"] == 1) {
+        echo "<li  class='active'><a href='profilePage.php'><i class='fa-solid fa-user'></i></a></li>";
+    }
 
-                        if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
-                            echo "<li><a href='loginForm.php'>Вход</a></li>";
-                        }
-                        ?>
+    if ($_COOKIE["admin"] == 0 and $_COOKIE["user"] == 0) {
+        echo "<li><a href='loginForm.php'>Вход</a></li>";
+    }
+    ?>
                     </ul>
                 </div>
             </div>
@@ -58,15 +53,15 @@
                         <h1>Профиль</h1>
                         <i class='fa-solid fa-user'></i>
                         <?php
-                            include 'db.php';
-                        $user = $_COOKIE["userID"];
-                        $res = mysqli_query($connection, "SELECT FIO FROM users WHERE ID='$user'");
-                        $row = mysqli_fetch_array($res);
-                        echo "<h2>" . $row["FIO"] . "</h2>";
-                        $res = mysqli_query($connection, "SELECT bonusPoints FROM users WHERE ID='$user'");
-                        $row = mysqli_fetch_array($res);
-                        echo "<h3>Бонусные баллы: " . $row["bonusPoints"] . "</h3>";
-                        ?>
+        include 'db.php';
+    $user = $_COOKIE["userID"];
+    $res = mysqli_query($connection, "SELECT FIO FROM users WHERE ID='$user'");
+    $row = mysqli_fetch_array($res);
+    echo "<h2>" . $row["FIO"] . "</h2>";
+    $res = mysqli_query($connection, "SELECT bonusPoints FROM users WHERE ID='$user'");
+    $row = mysqli_fetch_array($res);
+    echo "<h3>Бонусные баллы: " . $row["bonusPoints"] . "</h3>";
+    ?>
                          <form action="logOut.php" method="POST"><button type="submit" class="btn">Выход</button></form>
                     </div>
                 </div>
@@ -81,28 +76,28 @@
                 
                     
                     <?php
-                        session_start();
-                        include 'db.php';
-                        $sql = 'SELECT dateZak, sumZakaza FROM orders where idUser=' . $_COOKIE["userID"] . ' and dateZak != 0000-00-00';
-                        $result = mysqli_query($connection, $sql);
+    session_start();
+    include 'db.php';
+    $sql = 'SELECT dateZak, sumZakaza FROM orders where idUser=' . $_COOKIE["userID"] . ' and dateZak != 0000-00-00';
+    $result = mysqli_query($connection, $sql);
 
-                        if (mysqli_num_rows($result) > 0) {
-                            echo "<h4>История заказов</h4>
+    if (mysqli_num_rows($result) > 0) {
+        echo "<h4>История заказов</h4>
                                   <hr>";
 
-                            while ($row = mysqli_fetch_array($result)) {
-                                echo "<h3>" . $row['dateZak'] . "</h3>";
-                                echo "<h3>" . $row['sumZakaza'] . " руб.</h3><hr>";
+        while ($row = mysqli_fetch_array($result)) {
+            echo "<h3>" . $row['dateZak'] . "</h3>";
+            echo "<h3>" . $row['sumZakaza'] . " руб.</h3><hr>";
 
-                            }
-                            mysqli_close($connection);
+        }
+        mysqli_close($connection);
 
-                        } else {
+    } else {
 
-                            echo "<div class=' empty'>
+        echo "<div class=' empty'>
                             <h1>Нет заказов</h1>
                           </div>";
-                        } ?>
+    } ?>
                 </div>
                 
                 
